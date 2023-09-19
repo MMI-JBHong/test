@@ -1,0 +1,163 @@
+@media print {
+  /* A4 용지 크기와 여백 설정 */
+  @page {
+    size: A4;
+    margin: 20mm 10mm; /* 상단 및 좌우 여백 설정 */
+  }
+
+  /* 각 항목의 스타일 및 레이아웃 설정 */
+  .print-item {
+    margin-bottom: 5mm; /* 각 항목 아래 여백 설정 */
+  }
+}
+
+
+
+/* ---------- */
+
+.Wrap {
+  display: flex;
+  flex-direction: column;
+  width: 210mm;
+  height: 297mm;
+  background-color: white;
+  /* page-break-after: always; */ /* 페이지 브레이크 설정 */
+  break-after: always; /* 페이지 브레이크 설정 */
+}
+
+.TitleSection {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+}
+
+.TitleBox {
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-top: 5mm;
+  /* margin-bottom: 7mm; */ /* 🚨🚨🚨🚨🚨 결재 박스 관련(기존) */
+  /* margin-bottom: 10px; */ /* 🚨🚨🚨🚨🚨 결재 박스 관련(수정 후)1 */
+  margin-bottom: 5.8mm; /* 🚨🚨🚨🚨🚨 결재 박스 관련(수정 후)2 */
+}
+
+.InfoBox {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.Tables {
+  width: 100%;
+}
+
+.TdEmployeeInfoCategory {
+  display: flex;
+  /* height: 2.5%; */
+  font-size: 14px;
+}
+
+.EmployeeInfoBox {
+  display: flex;
+  width: 50%;
+  border-top: solid 1px black;
+}
+
+.EmployeeInfoTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  border-right: solid 1px black;
+  border-left: solid 1px black;
+  font-weight: 600;
+  padding: 5px 0;
+}
+
+.EmployeeInfoContents {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  width: 70%;
+  padding: 5px 0;
+}
+
+.WorkRecordListTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 2.5%; */
+  border: solid 1px black;
+  background-color: lightGray;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 5px 0;
+}
+
+.TdRecordListCategory {
+  display: flex;
+  /* height: 2.5%; */
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.RecordListCategoryWrap {
+  border-bottom: solid 1px black;
+  border-right: solid 1px black;
+  padding: 5px 0;
+}
+
+.RecordListCategoryTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.TdRecordList {
+  display: flex;
+}
+
+.RecordListResultSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-size: 10px;
+}
+
+.RecordListResult {
+  display: flex;
+  /* height: 25px; */ /* 🚨🚨🚨🚨🚨 결재 박스 관련(기존) */
+  height: 23px; /* 🚨🚨🚨🚨🚨 결재 박스 관련(수정 후) */
+}
+
+.RecordListDatesSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.RecordListDates {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 25px;
+  border-bottom: solid 1px black;
+  border-right: solid 1px black;
+  font-size: 10px;
+  font-weight: 600;
+
+  p {
+    margin-right: 5px;
+  }
+}
+
+
+
+
+
+
+
+

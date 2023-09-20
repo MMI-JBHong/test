@@ -1,15 +1,17 @@
-@media print {
+/* @media print { */
   /* A4 용지 크기와 여백 설정 */
-  @page {
-    size: A4;
-    margin: 20mm 10mm; /* 상단 및 좌우 여백 설정 */
-  }
+  /* @page {
+    size: A4; */
+    /* margin: 20mm 10mm;  */
+    /* 상단 및 좌우 여백 설정 */
+  /* } */
 
   /* 각 항목의 스타일 및 레이아웃 설정 */
-  .print-item {
-    margin-bottom: 5mm; /* 각 항목 아래 여백 설정 */
-  }
-}
+  /* .print-item {
+    margin-bottom: 5mm;  */
+    /* 각 항목 아래 여백 설정 */
+  /* }
+} */
 
 
 
@@ -22,7 +24,7 @@
   height: 297mm;
   background-color: white;
   /* page-break-after: always; */ /* 페이지 브레이크 설정 */
-  break-after: always; /* 페이지 브레이크 설정 */
+  /* break-after: always; */ /* 페이지 브레이크 설정 */
 }
 
 .TitleSection {
@@ -51,6 +53,7 @@
 
 .Tables {
   width: 100%;
+  break-after: always; /* 페이지 브레이크 설정 */
 }
 
 .TdEmployeeInfoCategory {

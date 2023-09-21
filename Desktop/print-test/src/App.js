@@ -134,6 +134,7 @@ const WorkRecordReportPrinting = ({
       });
   };
 
+  /* 👇👇👇 배열 자르기 👇👇👇 */
   const itemsPerFirstPage = 30; // 첫 페이지에 출력할 항목 수
   const itemsPerPage = 40; // (첫 페이지 이후) 한 페이지에 출력할 항목 수
 
@@ -159,6 +160,7 @@ const WorkRecordReportPrinting = ({
       pageIndex++;
     }
   }
+  /* 👆👆👆 배열 자르기 👆👆👆 */
 
   /* 👇👇👇 바이트 체크 👇👇👇 */
   // 👇 한글자 당 byte 구하기
@@ -341,9 +343,7 @@ const WorkRecordReportPrinting = ({
                 </RecordListCategoryWrap>
               </RecordListCategory>
 
-              <Tables
-              // style={{pageBreakBefore: 'always'}}
-              >
+              <Tables>
                 <tbody>
                   <tr
                     key={pageIndex}

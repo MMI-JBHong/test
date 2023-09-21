@@ -31,7 +31,7 @@ const WorkRecordReportPrinting = ({
     });
   }, []);
 
-  const ref = useRef();
+  c;
   const [recordListData, setRecordListData] = useState([]);
 
   const apartmentNameAtSessionStorage = sessionStorage.getItem('apartmentName');

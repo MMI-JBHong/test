@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import styled from 'styled-components';
 import axios from 'axios';
+import ReactToPrint from 'react-to-print'; // 프린트, 🚨 임시 주석(모듈 오류)
 
 interface WorkRecordReportPrintingProps {
   apartmentName: string;
@@ -30,7 +31,8 @@ const WorkRecordReportPrinting = ({
     });
   }, []);
 
-  // const ref = useRef();
+  const ref = useRef();
+
   const [recordListData, setRecordListData] = useState([]);
 
   const apartmentNameAtSessionStorage = sessionStorage.getItem('apartmentName');
@@ -149,6 +151,7 @@ const WorkRecordReportPrinting = ({
     // if (pages[pageIndex].length === itemsPerPage) {
     //   pageIndex++;
     // }
+
     if (
       pages[pageIndex].length ===
       (pageIndex === 0 ? itemsPerFirstPage : itemsPerPage)
@@ -157,71 +160,129 @@ const WorkRecordReportPrinting = ({
     }
   }
 
+  /* 👇👇👇 바이트 체크 👇👇👇 */
+  // 👇 한글자 당 byte 구하기
+  const charByteSize = (charValue) => {
+    if (charValue === null || charValue.length === 0) {
+      return 0;
+    }
+
+    let charCode = charValue.charCodeAt(0);
+    if (charCode <= 0x00007f) {
+      return 1;
+    } else if (charCode <= 0x0007ff) {
+      return 2;
+    } else if (charCode <= 0x00ffff) {
+      return 3;
+    } else {
+      return 4;
+    }
+  };
+
+  // 👇 문자열 총 바이트
+  const getByteLength = (str) => {
+    console.log('[str] result >>> ', str);
+    if (str == null || str.length === 0) {
+      return 0;
+    }
+    let size = 0;
+    for (let i = 0; i < str.length; i++) {
+      size += charByteSize(str.charAt(i));
+    }
+    return size;
+  };
+
+  // console.log('getByteLength(): ', getByteLength('ㅁ'));
+  /* 👆👆👆 바이트 체크 👆👆👆 */
+
   return (
     <>
-      <div style={{ position: 'fixed', top: 0 }}>
+      <ViewSection style={{ position: 'fixed', top: 0 }}>
+        {/* <ReactToPrint
+          trigger={() => (
+            <button
+              style={{
+                padding: '5px',
+                borderRadius: '0.5em',
+                backgroundColor: 'black',
+                color: 'white',
+                fontSize: '20px',
+              }}
+            >
+              인쇄하기
+            </button>
+          )}
+          content={() => ref.current}
+        /> */}
         <button onClick={() => window.print()}>인쇄하기</button>
-      </div>
+      </ViewSection>
 
-      <TitleSection>
-        <TitleBox>근무 보고서</TitleBox>
+      <PrintSection>
+        {/* <Wrap
+        ref={ref}
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      > */}
+        <TitleSection>
+          <TitleBox>근무 보고서</TitleBox>
 
-        <InfoBox>
-          <div>
-            단지명:
-            {apartmentNameAtSessionStorage
-              ? apartmentNameAtSessionStorage
-              : apartmentName}
-          </div>
-          <div>주식회사 앰앰아이</div>
-        </InfoBox>
-      </TitleSection>
+          <InfoBox>
+            <div>
+              단지명:
+              {apartmentNameAtSessionStorage
+                ? apartmentNameAtSessionStorage
+                : apartmentName}
+            </div>
+            <div>주식회사 앰앰아이</div>
+          </InfoBox>
+        </TitleSection>
 
-      <EmployeeInfoCategory>
-        <EmployeeInfoBox>
-          <EmployeeInfoTitle>기간</EmployeeInfoTitle>
-          <EmployeeInfoContents>
-            {startDate} ~ {endDate}
-          </EmployeeInfoContents>
-        </EmployeeInfoBox>
+        <EmployeeInfoCategory>
+          <EmployeeInfoBox>
+            <EmployeeInfoTitle>기간</EmployeeInfoTitle>
+            <EmployeeInfoContents>
+              {startDate} ~ {endDate}
+            </EmployeeInfoContents>
+          </EmployeeInfoBox>
 
-        <EmployeeInfoBox>
-          <EmployeeInfoTitle>작성일</EmployeeInfoTitle>
-          <EmployeeInfoContents className='right-section'>
-            {today}
-          </EmployeeInfoContents>
-        </EmployeeInfoBox>
-      </EmployeeInfoCategory>
+          <EmployeeInfoBox>
+            <EmployeeInfoTitle>작성일</EmployeeInfoTitle>
+            <EmployeeInfoContents className='right-section'>
+              {today}
+            </EmployeeInfoContents>
+          </EmployeeInfoBox>
+        </EmployeeInfoCategory>
 
-      <EmployeeInfoCategory>
-        <EmployeeInfoBox>
-          <EmployeeInfoTitle>소속</EmployeeInfoTitle>
-          <EmployeeInfoContents>전체</EmployeeInfoContents>
-        </EmployeeInfoBox>
+        <EmployeeInfoCategory>
+          <EmployeeInfoBox>
+            <EmployeeInfoTitle>소속</EmployeeInfoTitle>
+            <EmployeeInfoContents>전체</EmployeeInfoContents>
+          </EmployeeInfoBox>
 
-        <EmployeeInfoBox>
-          <EmployeeInfoTitle>근무자</EmployeeInfoTitle>
-          <EmployeeInfoContents className='right-section'>
-            전체
-          </EmployeeInfoContents>
-        </EmployeeInfoBox>
-      </EmployeeInfoCategory>
+          <EmployeeInfoBox>
+            <EmployeeInfoTitle>근무자</EmployeeInfoTitle>
+            <EmployeeInfoContents className='right-section'>
+              전체
+            </EmployeeInfoContents>
+          </EmployeeInfoBox>
+        </EmployeeInfoCategory>
 
-      <EmployeeInfoCategory>
-        <EmployeeInfoBox className='bottom'>
-          <EmployeeInfoTitle>행동</EmployeeInfoTitle>
-          <EmployeeInfoContents>순찰</EmployeeInfoContents>
-        </EmployeeInfoBox>
+        <EmployeeInfoCategory>
+          <EmployeeInfoBox className='bottom'>
+            <EmployeeInfoTitle>행동</EmployeeInfoTitle>
+            <EmployeeInfoContents>순찰</EmployeeInfoContents>
+          </EmployeeInfoBox>
 
-        <EmployeeInfoBox className='bottom'>
-          <EmployeeInfoTitle>건수</EmployeeInfoTitle>
-          <EmployeeInfoContents className='right-section'>
-            {dataArray.length}
-          </EmployeeInfoContents>
-        </EmployeeInfoBox>
-      </EmployeeInfoCategory>
+          <EmployeeInfoBox className='bottom'>
+            <EmployeeInfoTitle>건수</EmployeeInfoTitle>
+            <EmployeeInfoContents className='right-section'>
+              {dataArray.length}
+            </EmployeeInfoContents>
+          </EmployeeInfoBox>
+        </EmployeeInfoCategory>
 
-      {/* <WorkRecordListTitle>근무기록표</WorkRecordListTitle>
+        {/* <WorkRecordListTitle>근무기록표</WorkRecordListTitle>
       <RecordListCategory>
         <RecordListCategoryWrap className='report-idx'>
           <RecordListCategoryTitle>날짜</RecordListCategoryTitle>
@@ -248,98 +309,130 @@ const WorkRecordReportPrinting = ({
         </RecordListCategoryWrap>
       </RecordListCategory> */}
 
-      {pages.map((page, pageIndex) => {
-        const lastPageIndex = pages.length - 1;
+        {pages.map((page, pageIndex) => {
+          const lastPageIndex = pages.length - 1;
 
-        return (
-          <>
-            <WorkRecordListTitle>근무기록표</WorkRecordListTitle>
-            <RecordListCategory>
-              <RecordListCategoryWrap className='report-idx'>
-                <RecordListCategoryTitle>날짜</RecordListCategoryTitle>
-              </RecordListCategoryWrap>
+          return (
+            <>
+              <WorkRecordListTitle>근무기록표</WorkRecordListTitle>
+              <RecordListCategory>
+                <RecordListCategoryWrap className='report-idx'>
+                  <RecordListCategoryTitle>날짜</RecordListCategoryTitle>
+                </RecordListCategoryWrap>
 
-              <RecordListCategoryWrap className='job-group'>
-                <RecordListCategoryTitle>소속</RecordListCategoryTitle>
-              </RecordListCategoryWrap>
+                <RecordListCategoryWrap className='job-group'>
+                  <RecordListCategoryTitle>소속</RecordListCategoryTitle>
+                </RecordListCategoryWrap>
 
-              <RecordListCategoryWrap className='employee-name'>
-                <RecordListCategoryTitle>근무자</RecordListCategoryTitle>
-              </RecordListCategoryWrap>
+                <RecordListCategoryWrap className='employee-name'>
+                  <RecordListCategoryTitle>근무자</RecordListCategoryTitle>
+                </RecordListCategoryWrap>
 
-              <RecordListCategoryWrap className='time'>
-                <RecordListCategoryTitle>시간</RecordListCategoryTitle>
-              </RecordListCategoryWrap>
+                <RecordListCategoryWrap className='time'>
+                  <RecordListCategoryTitle>시간</RecordListCategoryTitle>
+                </RecordListCategoryWrap>
 
-              <RecordListCategoryWrap className='location'>
-                <RecordListCategoryTitle>순찰구역</RecordListCategoryTitle>
-              </RecordListCategoryWrap>
+                <RecordListCategoryWrap className='location'>
+                  <RecordListCategoryTitle>순찰구역</RecordListCategoryTitle>
+                </RecordListCategoryWrap>
 
-              <RecordListCategoryWrap className='action'>
-                <RecordListCategoryTitle>기기유형</RecordListCategoryTitle>
-              </RecordListCategoryWrap>
-            </RecordListCategory>
+                <RecordListCategoryWrap className='action'>
+                  <RecordListCategoryTitle>기기유형</RecordListCategoryTitle>
+                </RecordListCategoryWrap>
+              </RecordListCategory>
 
-            <Tables
-            // style={{pageBreakBefore: 'always'}}
-            >
-              <tbody>
-                <tr
-                  key={pageIndex}
-                  style={
-                    {
-                      // display: 'flex',
-                      // flexDirection: 'column',
-                      // height: '297mm',
+              <Tables
+              // style={{pageBreakBefore: 'always'}}
+              >
+                <tbody>
+                  <tr
+                    key={pageIndex}
+                    style={
+                      {
+                        // display: 'flex',
+                        // flexDirection: 'column',
+                        // height: '297mm',
+                      }
                     }
-                  }
-                >
-                  {page.map((row, index) => (
-                    <div key={index}>
-                      <RecordListResult>
-                        <RecordListDatesSection className='report-idx '>
-                          <RecordListDates>{row.date}</RecordListDates>
-                        </RecordListDatesSection>
-                        <RecordListDatesSection className='job-group'>
-                          <RecordListDates>{row.categoryName}</RecordListDates>
-                        </RecordListDatesSection>
-                        <RecordListDatesSection className='employee-name'>
-                          <RecordListDates>{row.employeeName}</RecordListDates>
-                        </RecordListDatesSection>
-                        <RecordListDatesSection className='time'>
-                          <RecordListDates>{row.time}</RecordListDates>
-                        </RecordListDatesSection>
-                        <RecordListDatesSection className='location'>
-                          <RecordListDates>
-                            {row.trackingLocation}
-                          </RecordListDates>
-                        </RecordListDatesSection>
-                        <RecordListDatesSection className='action'>
-                          <RecordListDates>{row.trackingType}</RecordListDates>
-                        </RecordListDatesSection>
-                      </RecordListResult>
-                    </div>
-                  ))}
-                </tr>
-              </tbody>
-            </Tables>
-            {/* <p style={{ pageBreakBefore: 'always' }} /> */}
-            {/* <p style={{ pageBreakBefore: 'always' }} /> */}
-            <p
-              style={
-                pageIndex === lastPageIndex
-                  ? { display: 'none' }
-                  : { pageBreakBefore: 'always' }
-              }
-            />
-          </>
-        );
-      })}
+                  >
+                    <td>
+                      {page.map((row, index) => (
+                        <div key={index}>
+                          <RecordListResult>
+                            <RecordListDatesSection className='report-idx '>
+                              <RecordListDates>{row.date}</RecordListDates>
+                            </RecordListDatesSection>
+                            <RecordListDatesSection className='job-group'>
+                              <RecordListDates>
+                                {row.categoryName}
+                              </RecordListDates>
+                            </RecordListDatesSection>
+                            <RecordListDatesSection className='employee-name'>
+                              <RecordListDates>
+                                {row.employeeName}
+                              </RecordListDates>
+                            </RecordListDatesSection>
+                            <RecordListDatesSection className='time'>
+                              <RecordListDates>{row.time}</RecordListDates>
+                            </RecordListDatesSection>
+                            <RecordListDatesSection className='location'>
+                              <RecordListDates>
+                                {row.trackingLocation}
+                              </RecordListDates>
+                            </RecordListDatesSection>
+                            <RecordListDatesSection className='action'>
+                              <RecordListDates>
+                                {row.trackingType}
+                              </RecordListDates>
+                            </RecordListDatesSection>
+                          </RecordListResult>
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                </tbody>
+              </Tables>
+
+              {/* <p style={{ pageBreakBefore: 'always' }} /> */}
+              <p
+                style={
+                  pageIndex === lastPageIndex
+                    ? { display: 'none' }
+                    : { pageBreakBefore: 'always' }
+                }
+              />
+            </>
+          );
+        })}
+      </PrintSection>
+      {/* </Wrap> */}
     </>
   );
 };
 
 export default WorkRecordReportPrinting;
+
+const ViewSection = styled.div`
+  /* 인쇄 시에만 출력할 스타일 지정 */
+  @media print {
+    display: none;
+    /* page-break-before: always; */
+  }
+`;
+
+const PrintSection = styled.div`
+  background-color: white;
+
+  /* 인쇄 시에만 출력할 스타일 지정 */
+  @media print {
+    display: block;
+    /* page-break-before: always; */
+    size: A4;
+  }
+
+  /* 웹 페이지에서는 보이지 않도록 숨김 처리 */
+  /* display: none; */
+`;
 
 const Wrap = styled.div`
   display: flex;
@@ -419,7 +512,7 @@ const EmployeeInfoContents = styled.div`
   }
 `;
 
-const WorkRecordListTitle = styled.td`
+const WorkRecordListTitle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
